@@ -40,11 +40,19 @@ public class Challenge {
 			
 			Product item = cart.getCart().get(i);
 			
+			if(item.quantity==0) {
+				System.out.println("Error: The Product is not Available");
+			}else if (item.isExpired) {
+				System.out.println("Error: The Product is Expired");
+			}
+			
 			total_price = total_price + item.price*item.quantity;
 			total_weight = total_weight + item.weight*item.quantity;
 			
 			weight_checkout = weight_checkout +'\n'+ item.quantity+"x "+item.name+"         "+item.weight*item.quantity+"g";
 			price_checkout = price_checkout+'\n'+ item.quantity+"x "+item.name+"         "+(item.quantity*item.price);
+			
+			item.quantity = item.quantity-1;
 			
 			if(item.willShip) {
 				Shipped_items.add(item);
@@ -60,6 +68,9 @@ public class Challenge {
 		double shipping_price = (double)Math.round(total_price * 0.085);
 		double amount = total_price + shipping_price;
 		
+		if(customer.Balance< amount) {
+			System.out.println("Error : No Suffcient Balance");
+		}
 		customer.Balance = customer.Balance - amount;
 		
 		String Final_Receipt = weight_checkout+price_checkout+'\n'+"Subtotal          "+total_price+'\n'+"Shipping          "+
